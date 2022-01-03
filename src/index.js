@@ -16,13 +16,20 @@ function generateDice(two, size) {
     size: 36,
     font: 'Comic sans'
   }
+  const buffer = 10
   const dice = []
   for (var i = 0; i < DICE_LETTERS.length; i++) {
-    const letter = _.sample(DICE_LETTERS[i])
+
     const x = size * (i + 1)
     const y = size
-    two.makeRoundedRectangle(x, y, size, size)
-    two.makeText(letter, x, y, styles)
+    const square = two.makeRoundedRectangle(x, y, size - buffer, size - buffer)
+    square.linewidth = 3
+
+    const letter = _.sample(DICE_LETTERS[i])
+    const text = two.makeText(letter, x, y, styles)
+    
+    const group = two.makeGroup(square, text)
+    dice.push(group)
   }
   return dice
 }
