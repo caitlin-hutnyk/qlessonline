@@ -1,4 +1,4 @@
-export const dice = [
+export const DICE_LETTERS = [
     ['M', 'M', 'L', 'L', 'B', 'Y'],
     ['V', 'E', 'G', 'K', 'P', 'P'],
     ['H', 'H', 'N', 'N', 'R', 'R'],

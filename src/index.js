@@ -1,30 +1,30 @@
 import Two from 'two.js'
-import { dice } from './dice.js'
 import _ from 'lodash'
+import { DICE_LETTERS } from './dice.js'
 
 function main() {
-  const two = init()
+  const two = new Two({ fullscreen: true }).appendTo(document.body)
   const size = Math.min(window.screen.height, window.screen.width) / 12
   addBackdrop(size)
-  rollDice(two, size)
+  const dice = generateDice(two, size)
 
   two.update()
 }
 
-function rollDice(two, size) {
-  for (const die of dice) {
-    const letter = sample(die)
-    console.log(letter)
-    two.makeRectangle(0, 0, size, size)
+function generateDice(two, size) {
+  const styles = {
+    size: 36,
+    font: 'Comic sans'
   }
-}
-
-function init() {
-  const params = {
-    fullscreen: false
+  const dice = []
+  for (var i = 0; i < DICE_LETTERS.length; i++) {
+    const letter = _.sample(DICE_LETTERS[i])
+    const x = size * (i + 1)
+    const y = size
+    two.makeRoundedRectangle(x, y, size, size)
+    two.makeText(letter, x, y, styles)
   }
-  const elem = document.body
-  return new Two(params).appendTo(elem)
+  return dice
 }
 
 function addBackdrop(size) {
