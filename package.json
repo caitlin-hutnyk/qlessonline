@@ -1,0 +1,19 @@
+{
+  "name": "qless",
+  "version": "1.0.0",
+  "private": true,
+  "license": "MIT",
+  "dependencies": {
+    "http-server": "^14.0.0",
+    "lodash": "^4.17.21",
+    "two.js": "^0.7.13"
+  },
+  "scripts": {
+    "start": "http-server",
+    "build": "webpack"
+  },
+  "devDependencies": {
+    "webpack": "^5.65.0",
+    "webpack-cli": "^4.9.1"
+  }
+}
