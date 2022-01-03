@@ -24,7 +24,6 @@ function init() {
     fullscreen: false
   }
   const elem = document.body
-  console.log(elem)
   return new Two(params).appendTo(elem)
 }
 
