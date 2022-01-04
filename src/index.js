@@ -9,11 +9,13 @@ function main() {
   const dice = generateDice(two, size)
   const state = {
     dragging: null,
+    offsetX: 0,
+    offsetY: 0
   }
 
   window.addEventListener('pointerdown', (e) => pointerDown(dice, state, size, e), false);
   window.addEventListener('pointermove', (e) => pointerMove(two, state, e), false);
-  window.addEventListener('pointerup', (e) => pointerUp(two, state, e), false);
+  window.addEventListener('pointerup', (e) => pointerUp(two, state, size, e), false);
 
   two.update()
 }
@@ -22,6 +24,8 @@ function pointerDown(dice, state, size, e) {
   for (const die of dice) {
     if (!isClicking(die, size, e)) continue
     state.dragging = die
+    state.offsetX = e.clientX - die.translation._x
+    state.offsetY = e.clientY - die.translation._y
     return
   }
 }
@@ -29,13 +33,24 @@ function pointerDown(dice, state, size, e) {
 function pointerMove(two, state, e) {
   const group = state.dragging
   if (group) {
-    group.position.set(e.clientX, e.clientY)
+    group.position.set(e.clientX - state.offsetX, e.clientY - state.offsetY)
     two.update()
   }
 }
 
-function pointerUp(two, state, e) {
-  state.dragging = null
+function pointerUp(two, state, size, e) {
+  const group = state.dragging
+  if (group) {
+    const x = e.clientX - state.offsetX
+    const y = e.clientY - state.offsetY
+    const snappedX = Math.round(x / size) * size
+    const snappedY = Math.round(y / size) * size
+    group.translation.set(snappedX, snappedY)
+    state.dragging = null
+    state.offsetX = null
+    state.offsetY = null
+    two.update()
+  }
 }
 
 function isClicking(die, size, e) {
@@ -54,15 +69,17 @@ function generateDice(two, size) {
   const dice = []
   for (var i = 0; i < DICE_LETTERS.length; i++) {
 
-    const x = size * (i + 1)
-    const y = size
     const square = two.makeRoundedRectangle(0, 0, size - buffer, size - buffer)
     square.linewidth = 3
 
     const letter = _.sample(DICE_LETTERS[i])
     const text = two.makeText(letter, 0, 0, styles)
 
+    // we set the positions on the group instead of the children
+    // so that we can manipulate them more easily later
     const group = two.makeGroup(square, text)
+    const x = size * (i + 1)
+    const y = size
     group.translation.set(x, y)
     dice.push(group)
   }
