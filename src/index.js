@@ -7,8 +7,42 @@ function main() {
   const size = Math.min(window.screen.height, window.screen.width) / 12
   addBackdrop(size)
   const dice = generateDice(two, size)
+  const state = {
+    dragging: null,
+  }
+
+  window.addEventListener('pointerdown', (e) => pointerDown(dice, state, size, e), false);
+  window.addEventListener('pointermove', (e) => pointerMove(two, state, e), false);
+  window.addEventListener('pointerup', (e) => pointerUp(two, state, e), false);
 
   two.update()
+}
+
+function pointerDown(dice, state, size, e) {
+  for (const die of dice) {
+    if (!isClicking(die, size, e)) continue
+    state.dragging = die
+    return
+  }
+}
+
+function pointerMove(two, state, e) {
+  const group = state.dragging
+  if (group) {
+    group.position.set(e.clientX, e.clientY)
+    two.update()
+  }
+}
+
+function pointerUp(two, state, e) {
+  state.dragging = null
+}
+
+function isClicking(die, size, e) {
+  return e.clientX > die.translation._x - (size / 2)
+    && e.clientX < die.translation._x + (size / 2)
+    && e.clientY > die.translation._y - (size / 2)
+    && e.clientY < die.translation._y + (size / 2)
 }
 
 function generateDice(two, size) {
@@ -22,13 +56,14 @@ function generateDice(two, size) {
 
     const x = size * (i + 1)
     const y = size
-    const square = two.makeRoundedRectangle(x, y, size - buffer, size - buffer)
+    const square = two.makeRoundedRectangle(0, 0, size - buffer, size - buffer)
     square.linewidth = 3
 
     const letter = _.sample(DICE_LETTERS[i])
-    const text = two.makeText(letter, x, y, styles)
-    
+    const text = two.makeText(letter, 0, 0, styles)
+
     const group = two.makeGroup(square, text)
+    group.translation.set(x, y)
     dice.push(group)
   }
   return dice
@@ -60,27 +95,3 @@ function addBackdrop(size) {
 }
 
 main()
-
-// // Two.js has convenient methods to make shapes and insert them into the scene.
-// var radius = 50;
-// var x = two.width * 0.5;
-// var y = two.height * 0.5 - radius * 1.25;
-// var circle = two.makeCircle(x, y, radius);
-
-// y = two.height * 0.5 + radius * 1.25;
-// var width = 100;
-// var height = 100;
-// var rect = two.makeRectangle(x, y, width, height);
-
-// // The object returned has many stylable properties:
-// circle.fill = '#FF8000';
-// // And accepts all valid CSS color:
-// circle.stroke = 'orangered';
-// circle.linewidth = 5;
-
-// rect.fill = 'rgb(0, 200, 255)';
-// rect.opacity = 0.75;
-// rect.noStroke();
-
-// // Don’t forget to tell two to draw everything to the screen
-// two.update();
