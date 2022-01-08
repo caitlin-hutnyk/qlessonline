@@ -1,63 +1,21 @@
 import Two from 'two.js'
 import _ from 'lodash'
 import { DICE_LETTERS } from './dice.js'
+import ClickHandler from './ClickHandler.js'
 
 function main() {
   const two = new Two({ fullscreen: true }).appendTo(document.body)
   const size = Math.min(window.screen.height, window.screen.width) / 12
   addBackdrop(size)
   const dice = generateDice(two, size)
-  const state = {
-    dragging: null,
-    offsetX: 0,
-    offsetY: 0
-  }
 
-  window.addEventListener('pointerdown', (e) => pointerDown(dice, state, size, e), false);
-  window.addEventListener('pointermove', (e) => pointerMove(two, state, e), false);
-  window.addEventListener('pointerup', (e) => pointerUp(two, state, size, e), false);
+  const clickHandler = new ClickHandler(two, dice, size)
+
+  window.addEventListener('pointerdown', clickHandler.pointerDown.bind(clickHandler), false);
+  window.addEventListener('pointermove', clickHandler.pointerMove.bind(clickHandler), false);
+  window.addEventListener('pointerup', clickHandler.pointerUp.bind(clickHandler), false);
 
   two.update()
-}
-
-function pointerDown(dice, state, size, e) {
-  for (const die of dice) {
-    if (!isClicking(die, size, e)) continue
-    state.dragging = die
-    state.offsetX = e.clientX - die.translation._x
-    state.offsetY = e.clientY - die.translation._y
-    return
-  }
-}
-
-function pointerMove(two, state, e) {
-  const group = state.dragging
-  if (group) {
-    group.position.set(e.clientX - state.offsetX, e.clientY - state.offsetY)
-    two.update()
-  }
-}
-
-function pointerUp(two, state, size, e) {
-  const group = state.dragging
-  if (group) {
-    const x = e.clientX - state.offsetX
-    const y = e.clientY - state.offsetY
-    const snappedX = Math.round(x / size) * size
-    const snappedY = Math.round(y / size) * size
-    group.translation.set(snappedX, snappedY)
-    state.dragging = null
-    state.offsetX = null
-    state.offsetY = null
-    two.update()
-  }
-}
-
-function isClicking(die, size, e) {
-  return e.clientX > die.translation._x - (size / 2)
-    && e.clientX < die.translation._x + (size / 2)
-    && e.clientY > die.translation._y - (size / 2)
-    && e.clientY < die.translation._y + (size / 2)
 }
 
 function generateDice(two, size) {
