@@ -1,3 +1,6 @@
+const X_GRID_LIMIT = 12
+const Y_GRID_LIMIT = 6
+
 class ClickHandler {
   constructor(two, dice, size) {
     this.two = two
@@ -7,10 +10,10 @@ class ClickHandler {
       dragging: null,
       offsetX: 0,
       offsetY: 0,
-      originalGridX: null,
-      originalGridY: null,
+      lastGridX: null,
+      lastGridY: null,
     }
-    this.grid = Array.from(Array(13), _ => Array(7).fill(false))
+    this.grid = Array.from(Array(X_GRID_LIMIT + 1), _ => Array(Y_GRID_LIMIT + 1).fill(false))
     for (const die of dice) {
       const [gridX, gridY] = this.nearestSquare(die.translation._x, die.translation._y)
       this.grid[gridX][gridY] = true
@@ -25,8 +28,8 @@ class ClickHandler {
         this.state.offsetY = e.clientY - die.translation._y
 
         const [gridX, gridY] = this.nearestSquare(die.translation._x, die.translation._y)
-        this.state.originalGridX = gridX
-        this.state.originalGridY = gridY
+        this.state.lastGridX = gridX
+        this.state.lastGridY = gridY
 
         this.grid[gridX][gridY] = false
         return
@@ -37,7 +40,16 @@ class ClickHandler {
   pointerMove(e) {
     const group = this.state.dragging
     if (group) {
-      group.position.set(e.clientX - this.state.offsetX, e.clientY - this.state.offsetY)
+      const x = e.clientX - this.state.offsetX
+      const y = e.clientY - this.state.offsetY
+
+      const [gridX, gridY] = this.nearestSquare(x, y)
+      if (this.isValidSquare(gridX, gridY)) {
+        this.state.lastGridX = gridX
+        this.state.lastGridY = gridY
+      }
+
+      group.position.set(x, y)
       this.two.update()
     }
   }
@@ -49,12 +61,12 @@ class ClickHandler {
       const y = e.clientY - this.state.offsetY
       const [gridX, gridY] = this.nearestSquare(x, y)
 
-      if (!this.grid[gridX][gridY]) {
+      if (this.isValidSquare(gridX, gridY)) {
         group.translation.set(gridX * this.size, gridY * this.size)
         this.grid[gridX][gridY] = true
       } else {
-        group.translation.set(this.state.originalGridX * this.size, this.state.originalGridY * this.size)
-        this.grid[this.state.originalGridX][this.state.originalGridY] = true
+        group.translation.set(this.state.lastGridX * this.size, this.state.lastGridY * this.size)
+        this.grid[this.state.lastGridX][this.state.lastGridY] = true
       }
       
       this.resetState()
@@ -74,12 +86,16 @@ class ClickHandler {
     return [Math.round(x / this.size), Math.round(y / this.size)]
   }
 
+  isValidSquare(gridX, gridY) {
+    return !(this.grid[gridX][gridY]) && gridX <= X_GRID_LIMIT && gridY <= Y_GRID_LIMIT
+  }
+
   resetState() {
     this.state.dragging = null
     this.state.offsetX = null
     this.state.offsetY = null
-    this.state.originalGridX = null
-    this.state.originalGridY = null
+    this.state.lastGridX = null
+    this.state.lastGridY = null
   }
 }
 
