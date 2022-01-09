@@ -87,7 +87,7 @@ class ClickHandler {
   }
 
   isValidSquare(gridX, gridY) {
-    return !(this.grid[gridX][gridY]) && gridX <= X_GRID_LIMIT && gridY <= Y_GRID_LIMIT
+    return gridX <= X_GRID_LIMIT && gridY <= Y_GRID_LIMIT && !(this.grid[gridX][gridY]) 
   }
 
   resetState() {
