@@ -1,5 +1,4 @@
-const X_GRID_LIMIT = 12
-const Y_GRID_LIMIT = 6
+import { X_GRID_LIMIT, Y_GRID_LIMIT } from './constants.js'
 
 class ClickHandler {
   constructor(two, dice, size) {
