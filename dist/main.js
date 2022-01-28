@@ -9,6 +9,17 @@
 /******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
+/***/ "./src/assets/sounds/click-tone.wav":
+/*!******************************************!*\
+  !*** ./src/assets/sounds/click-tone.wav ***!
+  \******************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"default\": () => (__WEBPACK_DEFAULT_EXPORT__)\n/* harmony export */ });\n/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (__webpack_require__.p + \"sounds/91940e3f5c0dacec1c6c1a5d8e091642.wav\");\n\n//# sourceURL=webpack://qless/./src/assets/sounds/click-tone.wav?");
+
+/***/ }),
+
 /***/ "./node_modules/lodash/lodash.js":
 /*!***************************************!*\
   !*** ./node_modules/lodash/lodash.js ***!
@@ -37,7 +48,18 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpac
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"default\": () => (__WEBPACK_DEFAULT_EXPORT__)\n/* harmony export */ });\n/* harmony import */ var _constants_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./constants.js */ \"./src/constants.js\");\n\r\n\r\nclass ClickHandler {\r\n  constructor(two, dice, size) {\r\n    this.two = two\r\n    this.dice = dice\r\n    this.size = size\r\n    this.state = {\r\n      dragging: null,\r\n      offsetX: 0,\r\n      offsetY: 0,\r\n      lastGridX: null,\r\n      lastGridY: null,\r\n    }\r\n    this.grid = Array.from(Array(_constants_js__WEBPACK_IMPORTED_MODULE_0__.X_GRID_LIMIT + 1), _ => Array(_constants_js__WEBPACK_IMPORTED_MODULE_0__.Y_GRID_LIMIT + 1).fill(false))\r\n    for (const die of dice) {\r\n      const [gridX, gridY] = this.nearestSquare(die.translation._x, die.translation._y)\r\n      this.grid[gridX][gridY] = true\r\n    }\r\n  }\r\n\r\n  pointerDown(e) {\r\n    for (const die of this.dice) {\r\n      if (this.isClicking(die, e)) {\r\n        this.state.dragging = die\r\n        this.state.offsetX = e.clientX - die.translation._x\r\n        this.state.offsetY = e.clientY - die.translation._y\r\n\r\n        const [gridX, gridY] = this.nearestSquare(die.translation._x, die.translation._y)\r\n        this.state.lastGridX = gridX\r\n        this.state.lastGridY = gridY\r\n\r\n        this.grid[gridX][gridY] = false\r\n        return\r\n      } \r\n    }\r\n  }\r\n  \r\n  pointerMove(e) {\r\n    const group = this.state.dragging\r\n    if (group) {\r\n      const x = e.clientX - this.state.offsetX\r\n      const y = e.clientY - this.state.offsetY\r\n\r\n      const [gridX, gridY] = this.nearestSquare(x, y)\r\n      if (this.isValidSquare(gridX, gridY)) {\r\n        this.state.lastGridX = gridX\r\n        this.state.lastGridY = gridY\r\n      }\r\n\r\n      group.position.set(x, y)\r\n      this.two.update()\r\n    }\r\n  }\r\n  \r\n  pointerUp(e) {\r\n    const group = this.state.dragging\r\n    if (group) {\r\n      const x = e.clientX - this.state.offsetX\r\n      const y = e.clientY - this.state.offsetY\r\n      const [gridX, gridY] = this.nearestSquare(x, y)\r\n\r\n      if (this.isValidSquare(gridX, gridY)) {\r\n        group.translation.set(gridX * this.size, gridY * this.size)\r\n        this.grid[gridX][gridY] = true\r\n      } else {\r\n        group.translation.set(this.state.lastGridX * this.size, this.state.lastGridY * this.size)\r\n        this.grid[this.state.lastGridX][this.state.lastGridY] = true\r\n      }\r\n      \r\n      this.resetState()\r\n\r\n      this.two.update()\r\n    }\r\n  }\r\n\r\n  isClicking(die, e) {\r\n    return e.clientX > die.translation._x - (this.size / 2)\r\n      && e.clientX < die.translation._x + (this.size / 2)\r\n      && e.clientY > die.translation._y - (this.size / 2)\r\n      && e.clientY < die.translation._y + (this.size / 2)\r\n  }\r\n\r\n  nearestSquare(x, y) {\r\n    return [Math.round(x / this.size), Math.round(y / this.size)]\r\n  }\r\n\r\n  isValidSquare(gridX, gridY) {\r\n    return gridX <= _constants_js__WEBPACK_IMPORTED_MODULE_0__.X_GRID_LIMIT && gridY <= _constants_js__WEBPACK_IMPORTED_MODULE_0__.Y_GRID_LIMIT && !(this.grid[gridX][gridY]) \r\n  }\r\n\r\n  resetState() {\r\n    this.state.dragging = null\r\n    this.state.offsetX = null\r\n    this.state.offsetY = null\r\n    this.state.lastGridX = null\r\n    this.state.lastGridY = null\r\n  }\r\n}\r\n\r\n/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (ClickHandler);\n\n//# sourceURL=webpack://qless/./src/ClickHandler.js?");
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"default\": () => (__WEBPACK_DEFAULT_EXPORT__)\n/* harmony export */ });\n/* harmony import */ var _constants_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./constants.js */ \"./src/constants.js\");\n/* harmony import */ var _Sound_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Sound.js */ \"./src/Sound.js\");\n\n\n\nclass ClickHandler {\n  constructor(two, dice, size) {\n    this.two = two\n    this.dice = dice\n    this.size = size\n    this.state = {\n      dragging: null,\n      offsetX: 0,\n      offsetY: 0,\n      lastGridX: null,\n      lastGridY: null,\n    }\n    this.grid = Array.from(Array(_constants_js__WEBPACK_IMPORTED_MODULE_0__.X_GRID_LIMIT + 1), _ => Array(_constants_js__WEBPACK_IMPORTED_MODULE_0__.Y_GRID_LIMIT + 1).fill(false))\n    for (const die of dice) {\n      const [gridX, gridY] = this.nearestSquare(die.translation._x, die.translation._y)\n      this.grid[gridX][gridY] = true\n    }\n  }\n\n  pointerDown(e) {\n    for (const die of this.dice) {\n      if (this.isClicking(die, e)) {\n        this.state.dragging = die\n        this.state.offsetX = e.clientX - die.translation._x\n        this.state.offsetY = e.clientY - die.translation._y\n\n        const [gridX, gridY] = this.nearestSquare(die.translation._x, die.translation._y)\n        this.state.lastGridX = gridX\n        this.state.lastGridY = gridY\n\n        this.grid[gridX][gridY] = false\n        return\n      } \n    }\n  }\n  \n  pointerMove(e) {\n    const group = this.state.dragging\n    if (group) {\n      const x = e.clientX - this.state.offsetX\n      const y = e.clientY - this.state.offsetY\n\n      const [gridX, gridY] = this.nearestSquare(x, y)\n      if (this.isValidSquare(gridX, gridY)) {\n        this.state.lastGridX = gridX\n        this.state.lastGridY = gridY\n      }\n\n      group.position.set(x, y)\n      this.two.update()\n    }\n  }\n  \n  pointerUp(e) {\n    const group = this.state.dragging\n    if (group) {\n      const x = e.clientX - this.state.offsetX\n      const y = e.clientY - this.state.offsetY\n      const [gridX, gridY] = this.nearestSquare(x, y)\n\n      if (this.isValidSquare(gridX, gridY)) {\n        group.translation.set(gridX * this.size, gridY * this.size)\n        this.grid[gridX][gridY] = true\n      } else {\n        group.translation.set(this.state.lastGridX * this.size, this.state.lastGridY * this.size)\n        this.grid[this.state.lastGridX][this.state.lastGridY] = true\n      }\n      \n      _Sound_js__WEBPACK_IMPORTED_MODULE_1__[\"default\"].playSound(_Sound_js__WEBPACK_IMPORTED_MODULE_1__.SOUND_TYPES.DIE_DROPPED)\n      this.resetState()\n      this.two.update()\n    }\n  }\n\n  isClicking(die, e) {\n    return e.clientX > die.translation._x - (this.size / 2)\n      && e.clientX < die.translation._x + (this.size / 2)\n      && e.clientY > die.translation._y - (this.size / 2)\n      && e.clientY < die.translation._y + (this.size / 2)\n  }\n\n  nearestSquare(x, y) {\n    return [Math.round(x / this.size), Math.round(y / this.size)]\n  }\n\n  isValidSquare(gridX, gridY) {\n    return gridX <= _constants_js__WEBPACK_IMPORTED_MODULE_0__.X_GRID_LIMIT && gridY <= _constants_js__WEBPACK_IMPORTED_MODULE_0__.Y_GRID_LIMIT && !(this.grid[gridX][gridY]) \n  }\n\n  resetState() {\n    this.state.dragging = null\n    this.state.offsetX = null\n    this.state.offsetY = null\n    this.state.lastGridX = null\n    this.state.lastGridY = null\n  }\n}\n\n/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (ClickHandler);\n\n//# sourceURL=webpack://qless/./src/ClickHandler.js?");
+
+/***/ }),
+
+/***/ "./src/Sound.js":
+/*!**********************!*\
+  !*** ./src/Sound.js ***!
+  \**********************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"SOUND_TYPES\": () => (/* binding */ SOUND_TYPES),\n/* harmony export */   \"default\": () => (/* binding */ Sound)\n/* harmony export */ });\n/* harmony import */ var _assets_sounds_click_tone_wav__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./assets/sounds/click-tone.wav */ \"./src/assets/sounds/click-tone.wav\");\n\n\nconst SOUND_TYPES = {\n    DIE_DROPPED: _assets_sounds_click_tone_wav__WEBPACK_IMPORTED_MODULE_0__[\"default\"]\n}\n\nclass Sound {\n    static playSound(sound) {\n        const audio = new Audio(sound)\n        audio.play()\n    }\n}\n\n//# sourceURL=webpack://qless/./src/Sound.js?");
 
 /***/ }),
 
@@ -48,7 +70,7 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpac
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"DICE_LETTERS\": () => (/* binding */ DICE_LETTERS),\n/* harmony export */   \"X_GRID_LIMIT\": () => (/* binding */ X_GRID_LIMIT),\n/* harmony export */   \"Y_GRID_LIMIT\": () => (/* binding */ Y_GRID_LIMIT)\n/* harmony export */ });\nconst DICE_LETTERS = [\r\n    ['M', 'M', 'L', 'L', 'B', 'Y'],\r\n    ['V', 'E', 'G', 'K', 'P', 'P'],\r\n    ['H', 'H', 'N', 'N', 'R', 'R'],\r\n    ['D', 'F', 'R', 'L', 'L', 'W'],\r\n    ['R', 'R', 'D', 'L', 'G', 'G'],\r\n    ['X', 'K', 'B', 'S', 'Z', 'N'],\r\n    ['W', 'H', 'H', 'T', 'T', 'P'],\r\n    ['C', 'C', 'B', 'T', 'J', 'D'],\r\n    ['C', 'C', 'M', 'T', 'T', 'S'],\r\n    ['O', 'L', 'I', 'N', 'N', 'Y'],\r\n    ['A', 'E', 'I', 'O', 'U', 'U'],\r\n    ['A', 'A', 'E', 'E', 'O', 'O']\r\n]\r\n\r\nconst X_GRID_LIMIT = 12\r\nconst Y_GRID_LIMIT = 6\n\n//# sourceURL=webpack://qless/./src/constants.js?");
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"DICE_LETTERS\": () => (/* binding */ DICE_LETTERS),\n/* harmony export */   \"X_GRID_LIMIT\": () => (/* binding */ X_GRID_LIMIT),\n/* harmony export */   \"Y_GRID_LIMIT\": () => (/* binding */ Y_GRID_LIMIT)\n/* harmony export */ });\nconst DICE_LETTERS = [\n    ['M', 'M', 'L', 'L', 'B', 'Y'],\n    ['V', 'E', 'G', 'K', 'P', 'P'],\n    ['H', 'H', 'N', 'N', 'R', 'R'],\n    ['D', 'F', 'R', 'L', 'L', 'W'],\n    ['R', 'R', 'D', 'L', 'G', 'G'],\n    ['X', 'K', 'B', 'S', 'Z', 'N'],\n    ['W', 'H', 'H', 'T', 'T', 'P'],\n    ['C', 'C', 'B', 'T', 'J', 'D'],\n    ['C', 'C', 'M', 'T', 'T', 'S'],\n    ['O', 'L', 'I', 'N', 'N', 'Y'],\n    ['A', 'E', 'I', 'O', 'U', 'U'],\n    ['A', 'A', 'E', 'E', 'O', 'O']\n]\n\nconst X_GRID_LIMIT = 12\nconst Y_GRID_LIMIT = 6\n\n//# sourceURL=webpack://qless/./src/constants.js?");
 
 /***/ }),
 
@@ -152,6 +174,26 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var two_
 /******/ 			if (!module.children) module.children = [];
 /******/ 			return module;
 /******/ 		};
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/publicPath */
+/******/ 	(() => {
+/******/ 		var scriptUrl;
+/******/ 		if (__webpack_require__.g.importScripts) scriptUrl = __webpack_require__.g.location + "";
+/******/ 		var document = __webpack_require__.g.document;
+/******/ 		if (!scriptUrl && document) {
+/******/ 			if (document.currentScript)
+/******/ 				scriptUrl = document.currentScript.src
+/******/ 			if (!scriptUrl) {
+/******/ 				var scripts = document.getElementsByTagName("script");
+/******/ 				if(scripts.length) scriptUrl = scripts[scripts.length - 1].src
+/******/ 			}
+/******/ 		}
+/******/ 		// When supporting browsers where an automatic publicPath is not supported you must specify an output.publicPath manually via configuration
+/******/ 		// or pass an empty string ("") and set the __webpack_public_path__ variable from your code to use your own logic.
+/******/ 		if (!scriptUrl) throw new Error("Automatic publicPath is not supported in this browser");
+/******/ 		scriptUrl = scriptUrl.replace(/#.*$/, "").replace(/\?.*$/, "").replace(/\/[^\/]+$/, "/");
+/******/ 		__webpack_require__.p = scriptUrl;
 /******/ 	})();
 /******/ 	
 /************************************************************************/
