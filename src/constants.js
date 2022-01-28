@@ -18,6 +18,7 @@ export const Y_GRID_LIMIT = 6
 
 export const WHITE = '#fff'
 export const GREEN = '#b3ffb3'
+export const YELLOW = '#ffff59'
 
 export const VALID_WORDS = new Set([
     "aa",

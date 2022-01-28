@@ -1,4 +1,4 @@
-import { X_GRID_LIMIT, Y_GRID_LIMIT, WHITE, GREEN, VALID_WORDS } from './constants.js'
+import { X_GRID_LIMIT, Y_GRID_LIMIT, WHITE, GREEN, YELLOW, VALID_WORDS } from './constants.js'
 
 class ClickHandler {
   constructor(two, dice, size) {
@@ -130,6 +130,7 @@ class ClickHandler {
       for(var y = 1; y <= Y_GRID_LIMIT; y++) {
         if (this.grid[x][y] === null) {
           this.updateWord(currentWord, currentGroups)
+          this.two.update()
           currentWord = ''
           currentGroups = []
         } else {
@@ -139,13 +140,24 @@ class ClickHandler {
         }
       }
     }
-    this.two.update()
   }
 
   updateWord(word, groups) {
     if (VALID_WORDS.has(word.toLowerCase())) {
       for (const group of groups) {
-        group.children[0].fill = GREEN
+        if (group.children[0].fill === WHITE) {
+          group.children[0].fill = GREEN
+        }
+      }
+    } else {
+      if (word.length > 1) {
+        for (const group of groups) {
+          if (group.children[0].fill === GREEN) {
+            console.log(word)
+            console.log('making yellow!')
+            group.children[0].fill = YELLOW
+          }
+        }
       }
     }
   }
