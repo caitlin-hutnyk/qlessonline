@@ -31,8 +31,7 @@ class ClickHandler {
         this.state.lastGridY = gridY
 
         this.grid[gridX][gridY] = null
-        die.children[0].fill = WHITE
-        this.two.update()
+        this.updateColors()
         return
       } 
     }
@@ -104,24 +103,22 @@ class ClickHandler {
 
   // don't think it's possible to ever have two distinct words on a single line/column
   updateColors() {
+    for (const die of this.dice) {
+      die.children[0].fill = WHITE
+    }
     // rows
     for(var y = 1; y <= Y_GRID_LIMIT; y++) {
       var currentWord = ''
+      var currentGroups = []
       for(var x = 1; x <= X_GRID_LIMIT; x++) {
-        if (this.grid[x][y] !== null) {
-          currentWord = currentWord.concat(this.grid[x][y].children[1].value)
-        }
-      }
-      if (currentWord.length) {
-        console.log(currentWord)
-        console.log(VALID_WORDS.has(currentWord.toLowerCase()))
-        if (VALID_WORDS.has(currentWord.toLowerCase())) {
-          for(var x_2 = 1; x_2 <= X_GRID_LIMIT; x_2++) {
-            const group = this.grid[x_2][y]
-            if (group !== null) {
-              group.children[0].fill = GREEN
-            }
-          }
+        if (this.grid[x][y] === null) {
+          this.updateWord(currentWord, currentGroups)
+          currentWord = ''
+          currentGroups = []
+        } else {
+          const group = this.grid[x][y]
+          currentWord = currentWord.concat(group.children[1].value)
+          currentGroups.push(group)
         }
       }
     }
@@ -129,27 +126,28 @@ class ClickHandler {
     //columns
     for(var x = 1; x <= X_GRID_LIMIT; x++) {
       var currentWord = ''
+      var currentGroups = []
       for(var y = 1; y <= Y_GRID_LIMIT; y++) {
-        if (this.grid[x][y] !== null) {
-          currentWord = currentWord.concat(this.grid[x][y].children[1].value)
-        }
-      }
-      if (currentWord.length) {
-        console.log(currentWord)
-        console.log(VALID_WORDS.has(currentWord.toLowerCase()))
-        if (VALID_WORDS.has(currentWord.toLowerCase())) {
-          for(var y_2 = 1; y_2 <= Y_GRID_LIMIT; y_2++) {
-            if (this.grid[x][y_2] !== null) {
-              this.grid[x][y_2].children[0].fill = GREEN
-            }
-          }
+        if (this.grid[x][y] === null) {
+          this.updateWord(currentWord, currentGroups)
+          currentWord = ''
+          currentGroups = []
+        } else {
+          const group = this.grid[x][y]
+          currentWord = currentWord.concat(group.children[1].value)
+          currentGroups.push(group)
         }
       }
     }
+    this.two.update()
   }
 
   updateWord(word, groups) {
-    
+    if (VALID_WORDS.has(word.toLowerCase())) {
+      for (const group of groups) {
+        group.children[0].fill = GREEN
+      }
+    }
   }
 }
 
