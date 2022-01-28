@@ -42,6 +42,10 @@ function generateDice(two, size) {
     group.translation.set(x, y)
     dice.push(group)
   }
+  two.update()
+  for (const die of dice) {
+    die._renderer.elem.style.cursor = 'grabbing'
+  }
   return dice
 }
 
@@ -106,6 +110,7 @@ function addBuyButton(two, size) {
   two.update()
 
   group._renderer.elem.addEventListener('click', _ => window.open('https://www.q-lessgame.com/', '_blank'), false)
+  group._renderer.elem.style.cursor = 'pointer'
 }
 
 function addGithub(two, size) {
@@ -127,6 +132,7 @@ function addGithub(two, size) {
   two.update()
 
   group._renderer.elem.addEventListener('click', _ => window.open('https://github.com/caitlin-hutnyk/qlessonline', '_blank'), false)
+  group._renderer.elem.style.cursor = 'pointer'
 }
 
 main()
