@@ -1,4 +1,4 @@
-import { X_GRID_LIMIT, Y_GRID_LIMIT } from './constants.js'
+import { X_GRID_LIMIT, Y_GRID_LIMIT, WHITE, GREEN, VALID_WORDS } from './constants.js'
 
 class ClickHandler {
   constructor(two, dice, size) {
@@ -12,10 +12,10 @@ class ClickHandler {
       lastGridX: null,
       lastGridY: null,
     }
-    this.grid = Array.from(Array(X_GRID_LIMIT + 1), _ => Array(Y_GRID_LIMIT + 1).fill(false))
+    this.grid = Array.from(Array(X_GRID_LIMIT + 1), _ => Array(Y_GRID_LIMIT + 1).fill(null))
     for (const die of dice) {
       const [gridX, gridY] = this.nearestSquare(die.translation._x, die.translation._y)
-      this.grid[gridX][gridY] = true
+      this.grid[gridX][gridY] = die
     }
   }
 
@@ -30,7 +30,9 @@ class ClickHandler {
         this.state.lastGridX = gridX
         this.state.lastGridY = gridY
 
-        this.grid[gridX][gridY] = false
+        this.grid[gridX][gridY] = null
+        die.children[0].fill = WHITE
+        this.two.update()
         return
       } 
     }
@@ -62,14 +64,17 @@ class ClickHandler {
 
       if (this.isValidSquare(gridX, gridY)) {
         group.translation.set(gridX * this.size, gridY * this.size)
-        this.grid[gridX][gridY] = true
+        this.grid[gridX][gridY] = group
       } else {
         group.translation.set(this.state.lastGridX * this.size, this.state.lastGridY * this.size)
-        this.grid[this.state.lastGridX][this.state.lastGridY] = true
+        this.grid[this.state.lastGridX][this.state.lastGridY] = group
       }
       
       this.resetState()
+      
 
+      this.two.update()
+      this.updateColors()
       this.two.update()
     }
   }
@@ -86,7 +91,7 @@ class ClickHandler {
   }
 
   isValidSquare(gridX, gridY) {
-    return gridX <= X_GRID_LIMIT && gridY <= Y_GRID_LIMIT && !(this.grid[gridX][gridY]) 
+    return gridX <= X_GRID_LIMIT && gridY <= Y_GRID_LIMIT && (this.grid[gridX][gridY] === null) 
   }
 
   resetState() {
@@ -95,6 +100,56 @@ class ClickHandler {
     this.state.offsetY = null
     this.state.lastGridX = null
     this.state.lastGridY = null
+  }
+
+  // don't think it's possible to ever have two distinct words on a single line/column
+  updateColors() {
+    // rows
+    for(var y = 1; y <= Y_GRID_LIMIT; y++) {
+      var currentWord = ''
+      for(var x = 1; x <= X_GRID_LIMIT; x++) {
+        if (this.grid[x][y] !== null) {
+          currentWord = currentWord.concat(this.grid[x][y].children[1].value)
+        }
+      }
+      if (currentWord.length) {
+        console.log(currentWord)
+        console.log(VALID_WORDS.has(currentWord.toLowerCase()))
+        if (VALID_WORDS.has(currentWord.toLowerCase())) {
+          for(var x_2 = 1; x_2 <= X_GRID_LIMIT; x_2++) {
+            const group = this.grid[x_2][y]
+            if (group !== null) {
+              group.children[0].fill = GREEN
+            }
+          }
+        }
+      }
+    }
+
+    //columns
+    for(var x = 1; x <= X_GRID_LIMIT; x++) {
+      var currentWord = ''
+      for(var y = 1; y <= Y_GRID_LIMIT; y++) {
+        if (this.grid[x][y] !== null) {
+          currentWord = currentWord.concat(this.grid[x][y].children[1].value)
+        }
+      }
+      if (currentWord.length) {
+        console.log(currentWord)
+        console.log(VALID_WORDS.has(currentWord.toLowerCase()))
+        if (VALID_WORDS.has(currentWord.toLowerCase())) {
+          for(var y_2 = 1; y_2 <= Y_GRID_LIMIT; y_2++) {
+            if (this.grid[x][y_2] !== null) {
+              this.grid[x][y_2].children[0].fill = GREEN
+            }
+          }
+        }
+      }
+    }
+  }
+
+  updateWord(word, groups) {
+    
   }
 }
 

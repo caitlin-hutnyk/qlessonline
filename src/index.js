@@ -5,11 +5,10 @@ import ClickHandler from './ClickHandler.js'
 
 function main() {
   const two = new Two({ fullscreen: true }).appendTo(document.body)
-  // const size = Math.min(window.screen.height, window.screen.width) / 12 * 1.3
   const size = Math.min(document.body.clientHeight / 7, document.body.clientWidth / 15.5)
   addBackground(two, size)
   const dice = generateDice(two, size)
-  const sideBar = addSideBar(two, size)
+  addSideBar(two, size)
 
   const clickHandler = new ClickHandler(two, dice, size)
 
