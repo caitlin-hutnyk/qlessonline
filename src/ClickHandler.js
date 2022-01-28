@@ -31,7 +31,6 @@ class ClickHandler {
         this.state.lastGridY = gridY
 
         this.grid[gridX][gridY] = null
-        this.updateColors()
         return
       } 
     }
@@ -50,6 +49,7 @@ class ClickHandler {
       }
 
       group.position.set(x, y)
+      this.updateColors()
       this.two.update()
     }
   }
