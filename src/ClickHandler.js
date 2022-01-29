@@ -17,6 +17,7 @@ class ClickHandler {
     for (const die of dice) {
       const [gridX, gridY] = this.nearestSquare(die.translation._x, die.translation._y)
       this.grid[gridX][gridY] = die
+      die.hasMoved = false
     }
   }
 
@@ -57,6 +58,7 @@ class ClickHandler {
   
   pointerUp(e) {
     const group = this.state.dragging
+    group.hasMoved = true
     if (group) {
       const x = e.clientX - this.state.offsetX
       const y = e.clientY - this.state.offsetY
@@ -122,6 +124,7 @@ class ClickHandler {
           currentGroups.push(group)
         }
       }
+      this.updateWord(currentWord, currentGroups)
     }
 
     //columns
@@ -140,6 +143,7 @@ class ClickHandler {
           currentGroups.push(group)
         }
       }
+      this.updateWord(currentWord, currentGroups)
     }
   }
 
@@ -153,9 +157,7 @@ class ClickHandler {
     } else {
       if (word.length > 1) {
         for (const group of groups) {
-          if (group.children[0].fill === GREEN) {
-            console.log(word)
-            console.log('making yellow!')
+          if (group.hasMoved) {
             group.children[0].fill = YELLOW
           }
         }
