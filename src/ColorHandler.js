@@ -2,7 +2,8 @@ import _ from 'lodash'
 import { X_GRID_LIMIT, Y_GRID_LIMIT, BLACK, GREEN, YELLOW, VALID_WORDS } from './constants.js'
 
 class ColorHandler {
-  constructor(grid, dice) {
+  constructor(two, grid, dice) {
+    this.two = two
     this.grid = grid
     this.dice = dice
   }

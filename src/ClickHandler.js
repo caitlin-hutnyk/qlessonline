@@ -21,7 +21,7 @@ class ClickHandler {
       this.grid[gridX][gridY] = die
       die.hasMoved = false
     }
-    this.colorHandler = new ColorHandler()
+    this.colorHandler = new ColorHandler(this.two, this.grid, this.dice)
     this.colorHandler.updateColors()
   }
 
