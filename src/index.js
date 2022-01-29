@@ -70,8 +70,9 @@ function addSideBar(two, size) {
   const titleSquare = addTitleSquare(two, size)
   const buyButton = addBuyButton(two, size)
   const githubButton = addGithub(two, size)
+  const refreshButton = addRefreshButton(two, size)
 
-  return [titleSquare, buyButton, githubButton]
+  return [titleSquare, buyButton, githubButton, refreshButton]
 }
 
 function addTitleSquare(two, size) {
@@ -133,6 +134,27 @@ function addGithub(two, size) {
 
   group._renderer.elem.addEventListener('click', _ => window.open('https://github.com/caitlin-hutnyk/qlessonline', '_blank'), false)
   group._renderer.elem.style.cursor = 'pointer'
+}
+
+function addRefreshButton(two, size) {
+  const styles = {
+    size: 30,
+    font: 'Comic sans'
+  }
+  const buffer = 10
+  const square = two.makeRoundedRectangle(0, 0, size * 3 - buffer, size - buffer)
+  square.linewidth = 3
+
+  const text = two.makeText('Refresh', 0, 0, styles)
+
+  const group = two.makeGroup(square, text)
+  const x = size * (X_GRID_LIMIT + 2)
+  const y = size * 5
+  group.translation.set(x, y)
+
+  two.update()
+
+  group._renderer.elem.addEventListener('click', _ => location.reload(), false)
 }
 
 main()
