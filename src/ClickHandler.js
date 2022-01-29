@@ -58,8 +58,8 @@ class ClickHandler {
   
   pointerUp(e) {
     const group = this.state.dragging
-    group.hasMoved = true
     if (group) {
+      group.hasMoved = true
       const x = e.clientX - this.state.offsetX
       const y = e.clientY - this.state.offsetY
       const [gridX, gridY] = this.nearestSquare(x, y)
