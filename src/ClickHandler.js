@@ -1,4 +1,5 @@
 import { X_GRID_LIMIT, Y_GRID_LIMIT } from './constants.js'
+import Sound, { SOUND_TYPES } from './Sound.js'
 
 class ClickHandler {
   constructor(two, dice, size) {
@@ -68,8 +69,8 @@ class ClickHandler {
         this.grid[this.state.lastGridX][this.state.lastGridY] = true
       }
       
+      Sound.playSound(SOUND_TYPES.DIE_DROPPED)
       this.resetState()
-
       this.two.update()
     }
   }
