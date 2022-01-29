@@ -1,21 +1,22 @@
 import Two from 'two.js'
 import _ from 'lodash'
-import { DICE_LETTERS, X_GRID_LIMIT, Y_GRID_LIMIT } from './constants.js'
+import { DICE_LETTERS, X_GRID_LIMIT, Y_GRID_LIMIT, WHITE, BLACK } from './constants.js'
 import ClickHandler from './ClickHandler.js'
 
 function main() {
   const two = new Two({ fullscreen: true }).appendTo(document.body)
-  // const size = Math.min(window.screen.height, window.screen.width) / 12 * 1.3
   const size = Math.min(document.body.clientHeight / 7, document.body.clientWidth / 15.5)
   addBackground(two, size)
   const dice = generateDice(two, size)
-  const sideBar = addSideBar(two, size)
+  addSideBar(two, size)
 
   const clickHandler = new ClickHandler(two, dice, size)
 
   window.addEventListener('pointerdown', clickHandler.pointerDown.bind(clickHandler), false);
   window.addEventListener('pointermove', clickHandler.pointerMove.bind(clickHandler), false);
   window.addEventListener('pointerup', clickHandler.pointerUp.bind(clickHandler), false);
+
+  document.body.style.backgroundColor = "#2e2e2e"
 
   two.update()
 }
@@ -34,6 +35,9 @@ function generateDice(two, size) {
 
     const letter = _.sample(DICE_LETTERS[i])
     const text = two.makeText(letter, 0, 0, styles)
+    square.fill = BLACK
+    text.stroke = WHITE
+    text.fill = WHITE
 
     // we set the positions on the group instead of the children
     // so that we can manipulate them more easily later
@@ -42,6 +46,10 @@ function generateDice(two, size) {
     const y = size
     group.translation.set(x, y)
     dice.push(group)
+  }
+  two.update()
+  for (const die of dice) {
+    die._renderer.elem.style.cursor = 'grabbing'
   }
   return dice
 }
@@ -55,7 +63,7 @@ function addBackground(two, size) {
       const a = two.makeLine(size * i + center - len, center + size * j, center + size * i + len, center + size * j);
       const b = two.makeLine(center + size * i, center + size * j - len, center + size * i, center + size * j + len);
 
-      a.stroke = b.stroke = '#000000';
+      a.stroke = b.stroke = WHITE;
       a.linewidth = b.linewidth = 0.25;
 
       two.update();
@@ -82,6 +90,9 @@ function addTitleSquare(two, size) {
   square.linewidth = 3
 
   const text = two.makeText('Q-less Online', 0, 0, styles)
+  square.fill = BLACK
+  text.stroke = WHITE
+  text.fill = WHITE
 
   const group = two.makeGroup(square, text)
   const x = size * (X_GRID_LIMIT + 2)
@@ -99,6 +110,9 @@ function addBuyButton(two, size) {
   square.linewidth = 3
 
   const text = two.makeText('Buy the game', 0, 0, styles)
+  square.fill = BLACK
+  text.stroke = WHITE
+  text.fill = WHITE
 
   const group = two.makeGroup(square, text)
   const x = size * (X_GRID_LIMIT + 2)
@@ -108,6 +122,7 @@ function addBuyButton(two, size) {
   two.update()
 
   group._renderer.elem.addEventListener('click', _ => window.open('https://www.q-lessgame.com/', '_blank'), false)
+  group._renderer.elem.style.cursor = 'pointer'
 }
 
 function addGithub(two, size) {
@@ -120,6 +135,9 @@ function addGithub(two, size) {
   square.linewidth = 3
 
   const text = two.makeText('Github', 0, 0, styles)
+  square.fill = BLACK
+  text.stroke = WHITE
+  text.fill = WHITE
 
   const group = two.makeGroup(square, text)
   const x = size * (X_GRID_LIMIT + 2)
@@ -129,6 +147,7 @@ function addGithub(two, size) {
   two.update()
 
   group._renderer.elem.addEventListener('click', _ => window.open('https://github.com/caitlin-hutnyk/qlessonline', '_blank'), false)
+  group._renderer.elem.style.cursor = 'pointer'
 }
 
 function addRefreshButton(two, size) {
@@ -141,6 +160,9 @@ function addRefreshButton(two, size) {
   square.linewidth = 3
 
   const text = two.makeText('Refresh', 0, 0, styles)
+  square.fill = BLACK
+  text.stroke = WHITE
+  text.fill = WHITE
 
   const group = two.makeGroup(square, text)
   const x = size * (X_GRID_LIMIT + 2)
