@@ -1,4 +1,5 @@
-import { X_GRID_LIMIT, Y_GRID_LIMIT, WHITE, GREEN, YELLOW, VALID_WORDS } from './constants.js'
+import _ from 'lodash'
+import { X_GRID_LIMIT, Y_GRID_LIMIT, BLACK, GREEN, YELLOW, VALID_WORDS } from './constants.js'
 import Sound, { SOUND_TYPES } from './Sound.js'
 
 class ClickHandler {
@@ -19,6 +20,7 @@ class ClickHandler {
       this.grid[gridX][gridY] = die
       die.hasMoved = false
     }
+    this.updateColors()
   }
 
   pointerDown(e) {
@@ -104,10 +106,10 @@ class ClickHandler {
     this.state.lastGridY = null
   }
 
-  // don't think it's possible to ever have two distinct words on a single line/column
   updateColors() {
     for (const die of this.dice) {
-      die.children[0].fill = WHITE
+      die.children[0].fill = BLACK
+      die.children[0].stroke = BLACK
     }
     // rows
     for(var y = 1; y <= Y_GRID_LIMIT; y++) {
@@ -150,15 +152,20 @@ class ClickHandler {
   updateWord(word, groups) {
     if (VALID_WORDS.has(word.toLowerCase())) {
       for (const group of groups) {
-        if (group.children[0].fill === WHITE) {
+        if (group.children[0].fill === BLACK) {
           group.children[0].fill = GREEN
+          group.children[0].stroke = GREEN
         }
       }
     } else {
       if (word.length > 1) {
-        for (const group of groups) {
-          if (group.hasMoved) {
-            group.children[0].fill = YELLOW
+        // the .every() line stops weird cases where a word is partly black and partly yellow
+        if (_.every(groups, (group) => group.hasMoved)) {
+          for (const group of groups) {
+            if (group.hasMoved) {
+              group.children[0].fill = YELLOW
+              group.children[0].stroke = YELLOW
+            }
           }
         }
       }

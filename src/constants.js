@@ -16,9 +16,10 @@ export const DICE_LETTERS = [
 export const X_GRID_LIMIT = 12
 export const Y_GRID_LIMIT = 6
 
+export const BLACK = '#000000'
 export const WHITE = '#fff'
-export const GREEN = '#b3ffb3'
-export const YELLOW = '#ffff59'
+export const GREEN = '#00994C'
+export const YELLOW = '#FFAA00'
 
 export const VALID_WORDS = new Set([
     "aa",
