@@ -172,6 +172,7 @@ function addRefreshButton(two, size) {
   two.update()
 
   group._renderer.elem.addEventListener('click', _ => location.reload(), false)
+  group._renderer.elem.style.cursor = 'pointer'
 }
 
 main()
