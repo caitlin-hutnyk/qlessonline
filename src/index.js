@@ -1,6 +1,6 @@
 import Two from 'two.js'
 import _ from 'lodash'
-import { DICE_LETTERS, X_GRID_LIMIT, Y_GRID_LIMIT, WHITE, BLACK } from './constants.js'
+import { DICE_LETTERS, X_GRID_LIMIT, Y_GRID_LIMIT, WHITE, BLACK, GREEN } from './constants.js'
 import ClickHandler from './ClickHandler.js'
 
 function main() {
@@ -9,10 +9,10 @@ function main() {
   addBackground(two, size)
   const dice = generateDice(two, size)
   addSideBar(two, size)
+  addWinPanel(two, size)
 
   const clickHandler = new ClickHandler(two, dice, size)
 
-  window.addEventListener('pointerdown', clickHandler.pointerDown.bind(clickHandler), false);
   window.addEventListener('pointermove', clickHandler.pointerMove.bind(clickHandler), false);
   window.addEventListener('pointerup', clickHandler.pointerUp.bind(clickHandler), false);
 
@@ -173,6 +173,31 @@ function addRefreshButton(two, size) {
 
   group._renderer.elem.addEventListener('click', _ => location.reload(), false)
   group._renderer.elem.style.cursor = 'pointer'
+}
+
+function addWinPanel(two, size) {
+  const styles = {
+    size: 30,
+    font: 'Comic sans'
+  }
+  const buffer = 10
+  const square = two.makeRoundedRectangle(0, 0, size * X_GRID_LIMIT - buffer, size * Y_GRID_LIMIT - buffer)
+  square.linewidth = 3
+
+  const text = two.makeText('You win!', 0, 0, styles)
+  square.fill = GREEN
+  text.stroke = WHITE
+  text.fill = WHITE
+
+  const group = two.makeGroup(square, text)
+  const x = size * (X_GRID_LIMIT / 2 + 0.5)
+  const y = size * (Y_GRID_LIMIT / 2 + 0.5)
+  group.translation.set(x, y)
+
+  two.update()
+
+  group._renderer.elem.classList.add('winPanel')
+  group._renderer.elem.style.display = 'none'
 }
 
 main()

@@ -49,6 +49,7 @@ class ColorHandler {
       }
       this.updateWord(currentWord, currentGroups)
     }
+    this.checkWin()
   }
 
   updateWord(word, groups) {
@@ -71,6 +72,12 @@ class ColorHandler {
           }
         }
       }
+    }
+  }
+
+  checkWin() {
+    if (_.every(this.dice, (die) => die.children[0].fill === GREEN)) {
+      document.getElementsByClassName('winPanel')[0].style.display = 'block'
     }
   }
 }

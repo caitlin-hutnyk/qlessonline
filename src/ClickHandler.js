@@ -20,26 +20,22 @@ class ClickHandler {
       const [gridX, gridY] = this.nearestSquare(die.translation._x, die.translation._y)
       this.grid[gridX][gridY] = die
       die.hasMoved = false
+      die._renderer.elem.addEventListener('mousedown', e => this.setAsClicked(die, e), false)
     }
     this.colorHandler = new ColorHandler(this.two, this.grid, this.dice)
     this.colorHandler.updateColors()
   }
 
-  pointerDown(e) {
-    for (const die of this.dice) {
-      if (this.isClicking(die, e)) {
-        this.state.dragging = die
-        this.state.offsetX = e.clientX - die.translation._x
-        this.state.offsetY = e.clientY - die.translation._y
+  setAsClicked(die, e) {
+    this.state.dragging = die
+    this.state.offsetX = e.clientX - die.translation._x
+    this.state.offsetY = e.clientY - die.translation._y
 
-        const [gridX, gridY] = this.nearestSquare(die.translation._x, die.translation._y)
-        this.state.lastGridX = gridX
-        this.state.lastGridY = gridY
+    const [gridX, gridY] = this.nearestSquare(die.translation._x, die.translation._y)
+    this.state.lastGridX = gridX
+    this.state.lastGridY = gridY
 
-        this.grid[gridX][gridY] = null
-        return
-      } 
-    }
+    this.grid[gridX][gridY] = null
   }
   
   pointerMove(e) {
