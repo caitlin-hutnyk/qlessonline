@@ -38,10 +38,10 @@ class ClickHandler {
 
         this.grid[gridX][gridY] = null
         return
-      } 
+      }
     }
   }
-  
+
   pointerMove(e) {
     const group = this.state.dragging
     if (group) {
@@ -59,7 +59,7 @@ class ClickHandler {
       this.two.update()
     }
   }
-  
+
   pointerUp(e) {
     const group = this.state.dragging
     if (group) {
@@ -75,10 +75,10 @@ class ClickHandler {
         group.translation.set(this.state.lastGridX * this.size, this.state.lastGridY * this.size)
         this.grid[this.state.lastGridX][this.state.lastGridY] = group
       }
-      
+
       Sound.playSound(SOUND_TYPES.DIE_DROPPED)
       this.resetState()
-      
+
       this.two.update()
       this.colorHandler.updateColors()
       this.two.update()
@@ -97,7 +97,7 @@ class ClickHandler {
   }
 
   isValidSquare(gridX, gridY) {
-    return gridX <= X_GRID_LIMIT && gridY <= Y_GRID_LIMIT && (this.grid[gridX][gridY] === null) 
+    return gridX <= X_GRID_LIMIT && gridY <= Y_GRID_LIMIT && (this.grid[gridX][gridY] === null)
   }
 
   resetState() {
