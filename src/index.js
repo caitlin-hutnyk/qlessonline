@@ -1,6 +1,6 @@
 import Two from 'two.js'
 import _ from 'lodash'
-import { DICE_LETTERS, X_GRID_LIMIT, Y_GRID_LIMIT, WHITE, BLACK } from './constants.js'
+import { DICE_LETTERS, X_GRID_LIMIT, Y_GRID_LIMIT, WHITE, BLACK, MODE } from './constants.js'
 import ClickHandler from './ClickHandler.js'
 
 function main() {
@@ -76,8 +76,9 @@ function addSideBar(two, size) {
   const buyButton = addBuyButton(two, size)
   const githubButton = addGithub(two, size)
   const refreshButton = addRefreshButton(two, size)
+  const cursedButton = addCursedButton(two, size)
 
-  return [titleSquare, buyButton, githubButton, refreshButton]
+  return [titleSquare, buyButton, githubButton, refreshButton, cursedButton]
 }
 
 function addTitleSquare(two, size) {
@@ -173,6 +174,48 @@ function addRefreshButton(two, size) {
 
   group._renderer.elem.addEventListener('click', _ => location.reload(), false)
   group._renderer.elem.style.cursor = 'pointer'
+}
+
+function addCursedButton(two, size) {
+  const styles = {
+    size: 30,
+    font: 'Comic sans'
+  }
+  const buffer = 10
+  const square = two.makeRoundedRectangle(0, 0, size * 3 - buffer, size - buffer)
+  square.linewidth = 3
+
+  const mode = localStorage.getItem('gameMode')
+  const text = two.makeText(mode === MODE.CURSED ? '??' : '?', 0, 0, styles)
+  square.fill = BLACK
+  text.stroke = WHITE
+  text.fill = WHITE
+
+  const group = two.makeGroup(square, text)
+  const x = size * (X_GRID_LIMIT + 2)
+  const y = size * 5
+  group.translation.set(x, y)
+
+  two.update()
+
+  group._renderer.elem.addEventListener('click', _ => setMode())
+  group._renderer.elem.style.cursor = 'pointer'
+}
+
+function setMode() {
+  const mode = localStorage.getItem('gameMode')
+  if (mode) {
+    if (mode === MODE.DEFAULT) {
+      localStorage.setItem('gameMode', MODE.CURSED)
+    }
+    else {
+      localStorage.setItem('gameMode', MODE.DEFAULT)
+    }
+  }
+  else {
+    localStorage.setItem('gameMode', MODE.CURSED)
+  }
+  location.reload()
 }
 
 main()

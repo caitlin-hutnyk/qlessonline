@@ -9,7 +9,7 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.wav$/,
+        test: /\.(wav|mp3)$/,
         loader: 'file-loader',
         options: {
           outputPath: 'sounds'

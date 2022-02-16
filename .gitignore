@@ -1,2 +1,4 @@
 /node_modules
 /src/test.js
+
+.DS_Store
