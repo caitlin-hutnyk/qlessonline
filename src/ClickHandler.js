@@ -1,10 +1,11 @@
 import _ from 'lodash'
-import { X_GRID_LIMIT, Y_GRID_LIMIT } from './constants.js'
+import { X_GRID_LIMIT, Y_GRID_LIMIT, BLACK } from './constants.js'
 import Sound, { SOUND_TYPES } from './Sound.js'
 import ColorHandler from './ColorHandler.js'
 
 class ClickHandler {
   constructor(two, dice, size) {
+    this.inGame = true
     this.two = two
     this.dice = dice
     this.size = size
@@ -23,19 +24,21 @@ class ClickHandler {
       die._renderer.elem.addEventListener('mousedown', e => this.setAsClicked(die, e), false)
     }
     this.colorHandler = new ColorHandler(this.two, this.grid, this.dice)
-    this.colorHandler.updateColors()
+    this.updateAndCheckWin()
   }
 
   setAsClicked(die, e) {
-    this.state.dragging = die
-    this.state.offsetX = e.clientX - die.translation._x
-    this.state.offsetY = e.clientY - die.translation._y
+    if (this.inGame) {
+      this.state.dragging = die
+      this.state.offsetX = e.clientX - die.translation._x
+      this.state.offsetY = e.clientY - die.translation._y
 
-    const [gridX, gridY] = this.nearestSquare(die.translation._x, die.translation._y)
-    this.state.lastGridX = gridX
-    this.state.lastGridY = gridY
+      const [gridX, gridY] = this.nearestSquare(die.translation._x, die.translation._y)
+      this.state.lastGridX = gridX
+      this.state.lastGridY = gridY
 
-    this.grid[gridX][gridY] = null
+      this.grid[gridX][gridY] = null
+    }
   }
   
   pointerMove(e) {
@@ -51,7 +54,7 @@ class ClickHandler {
       }
 
       group.position.set(x, y)
-      this.colorHandler.updateColors()
+      this.updateAndCheckWin()
       this.two.update()
     }
   }
@@ -76,16 +79,10 @@ class ClickHandler {
       this.resetState()
       
       this.two.update()
-      this.colorHandler.updateColors()
+      this.updateAndCheckWin()
+
       this.two.update()
     }
-  }
-
-  isClicking(die, e) {
-    return e.clientX > die.translation._x - (this.size / 2)
-      && e.clientX < die.translation._x + (this.size / 2)
-      && e.clientY > die.translation._y - (this.size / 2)
-      && e.clientY < die.translation._y + (this.size / 2)
   }
 
   nearestSquare(x, y) {
@@ -102,6 +99,39 @@ class ClickHandler {
     this.state.offsetY = null
     this.state.lastGridX = null
     this.state.lastGridY = null
+  }
+
+  restart() {
+    for (var i = 0; i < this.dice.length; i++) {
+      const die = this.dice[i]
+      const [oldGridX, oldGridY] = this.nearestSquare(die.translation._x, die.translation._y)
+      const newGridX = i + 1
+      const newGridY = 1
+      die.position.set(newGridX * this.size, newGridY * this.size)
+      die.hasMoved = false
+
+      this.grid[newGridX][newGridY] = die
+      this.grid[oldGridX][oldGridY] = null
+
+    }
+    this.updateAndCheckWin()
+    this.two.update()
+  }
+
+  updateAndCheckWin() {
+    const win = this.colorHandler.updateColors()
+    if (win) {
+      // document.getElementsByClassName('winPanel')[0].style.display = 'block'
+      // this.pauseGame()
+    }
+  }
+
+  pauseGame() {
+    this.inGame = false
+  }
+
+  unpauseGame() {
+    this.inGame = true
   }
 }
 

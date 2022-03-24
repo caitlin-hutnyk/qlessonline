@@ -20,6 +20,7 @@ export const BLACK = '#000000'
 export const WHITE = '#fff'
 export const GREEN = '#00994C'
 export const YELLOW = '#FFAA00'
+export const GREY = '#666666'
 
 export const VALID_WORDS = new Set([
     "aa",
