@@ -49,6 +49,7 @@ class ColorHandler {
       }
       this.updateWord(currentWord, currentGroups)
     }
+    return this.checkWin()
   }
 
   updateWord(word, groups) {
@@ -72,6 +73,10 @@ class ColorHandler {
         }
       }
     }
+  }
+
+  checkWin() {
+    return _.every(this.dice, (die) => die.children[0].fill === GREEN)
   }
 }
 
