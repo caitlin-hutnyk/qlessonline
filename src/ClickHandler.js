@@ -2,6 +2,7 @@ import _ from 'lodash'
 import { X_GRID_LIMIT, Y_GRID_LIMIT, BLACK } from './constants.js'
 import Sound, { SOUND_TYPES } from './Sound.js'
 import ColorHandler from './ColorHandler.js'
+import JSConfetti from 'js-confetti'
 
 class ClickHandler {
   constructor(two, dice, size) {
@@ -121,8 +122,8 @@ class ClickHandler {
   updateAndCheckWin() {
     const win = this.colorHandler.updateColors()
     if (win) {
-      // document.getElementsByClassName('winPanel')[0].style.display = 'block'
-      // this.pauseGame()
+      const jsConfetti = new JSConfetti()
+      jsConfetti.addConfetti()
     }
   }
 
